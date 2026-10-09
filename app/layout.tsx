@@ -12,10 +12,15 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://citysignal-sepia.vercel.app";
+const OG_TITLE = "citysignal - normalized Toronto building permits";
+const OG_DESCRIPTION =
+  "202,779 Toronto building permits normalized from 31 fields to 8. Search by postal code or street, with honest provenance on every record.";
+
 export const metadata: Metadata = {
-  title: "citysignal - normalized Toronto building permits",
-  description:
-    "One clean API over Toronto's messy open data. Search 202,779 active building permits by postal code or street, with honest provenance on every record.",
+  metadataBase: new URL(SITE_URL),
+  title: OG_TITLE,
+  description: OG_DESCRIPTION,
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -23,6 +28,27 @@ export const metadata: Metadata = {
       "/favicon.ico",
     ],
     apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "citysignal",
+    url: SITE_URL,
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}/og-card.png`,
+        width: 1200,
+        height: 630,
+        alt: OG_TITLE,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    images: [`${SITE_URL}/og-card.png`],
   },
 };
 
