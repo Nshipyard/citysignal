@@ -1,0 +1,52 @@
+# citysignal
+
+citysignal is a normalized API over Toronto municipal open data, plus a demo UI.
+Reference city: Toronto. The normalization is the product.
+
+## What it does
+
+Toronto publishes 202,779 active building permits through its CKAN open data
+portal with 31 inconsistent raw fields. citysignal queries the portal live,
+normalizes each record into 8 documented fields, and serves them over REST
+with provenance metadata on every response. Values are verbatim from the
+source; only field names are normalized.
+
+## API (no key required)
+
+Base URL: `https://city.nshipyard.com` (local: `http://localhost:3000`).
+
+- `GET /api/v1/permits?postal_code=M5V&status=active&limit=20` - search
+  normalized permits. Params: `postal_code` (FSA prefix, e.g. M5V),
+  `status` (`active` excludes abandoned/revoked, or a substring like
+  `Permit Issued`), `q` (full-text search), `limit` (1-100, default 20).
+- `GET /api/v1/permits/{id}` - one permit by city permit number
+  (e.g. `11 249370 BLD`). 404 when unknown.
+- `GET /api/openapi.json` - OpenAPI 3.1 document.
+- `GET /api/health` - service status.
+
+## Normalized record shape
+
+`{ id, address, ward, category, status, applied_date, description, source }`.
+`source` is always `toronto-open-data:building-permits-active-permits`.
+
+## Provenance (honest labeling)
+
+Responses include `meta.provenance`: the source dataset, record count at
+query time, whether the response was served from the 10-minute server cache
+(`cached`, `cached_at`), and a note describing the normalization. Cached
+responses are labeled as cached, never as fresh.
+
+## Limits (v1)
+
+- One resource: building permits. 311 requests and business licences are
+  planned next, in the same record shape.
+- The API pulls up to 500 records per upstream CKAN query and filters in
+  memory; `meta.total` counts matches within that pull.
+- Upstream failures return 502 with a plain error message.
+
+## Source
+
+Next.js 16 + TypeScript. CKAN client and normalizer: `lib/toronto.ts`.
+Author: Richardson Dackam (https://x.com/richardsondx,
+https://github.com/richardsondx). License: MIT. Data: City of Toronto,
+open data licence.
