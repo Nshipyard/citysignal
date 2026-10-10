@@ -13,7 +13,7 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://citysignal-sepia.vercel.app";
+const SITE_URL = "https://city.nshipyard.com";
 const OG_TITLE = "citysignal - normalized Toronto building permits";
 const OG_DESCRIPTION =
   "202,779 Toronto building permits normalized from 31 fields to 8. Search by postal code or street, with honest provenance on every record.";
